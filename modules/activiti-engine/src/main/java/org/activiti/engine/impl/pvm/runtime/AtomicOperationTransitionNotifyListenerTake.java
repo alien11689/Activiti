@@ -24,6 +24,7 @@ import org.activiti.engine.impl.pvm.process.ScopeImpl;
 import org.activiti.engine.impl.pvm.process.TransitionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 
 /**
@@ -59,7 +60,9 @@ public class AtomicOperationTransitionNotifyListenerTake implements AtomicOperat
 
     } else {
     	if (log.isDebugEnabled()) {
-    		log.debug("{} takes transition {}", execution, transition);
+            MDC.put("businessKey", execution.getProcessBusinessKey());
+            log.debug("{} takes transition {}", execution, transition);
+            MDC.remove("businessKey");
     	}
       execution.setExecutionListenerIndex(0);
       execution.setEventName(null);

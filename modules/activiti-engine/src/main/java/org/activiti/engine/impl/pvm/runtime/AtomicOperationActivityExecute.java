@@ -21,6 +21,7 @@ import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.logging.LogMDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 
 /**
@@ -42,8 +43,10 @@ public class AtomicOperationActivityExecute implements AtomicOperation {
       throw new PvmException("no behavior specified in "+activity);
     }
 
+    MDC.put("businessKey", execution.getProcessBusinessKey());
     log.debug("{} executes {}: {}", execution, activity, activityBehavior.getClass().getName());
-    
+    MDC.remove("businessKey");
+
     try {
     	if(Context.getProcessEngineConfiguration() != null && Context.getProcessEngineConfiguration().getEventDispatcher().isEnabled()) {
       	Context.getProcessEngineConfiguration().getEventDispatcher().dispatchEvent(
